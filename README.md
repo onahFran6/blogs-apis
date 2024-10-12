@@ -123,7 +123,7 @@ The server will start on [http://localhost:3000](http://localhost:3000).
 
 # Database diagram
 
-![alt text](<Screenshot 2024-10-12 at 10.24.46 PM.png>)
+![alt text](https://res.cloudinary.com/babypicserver/image/upload/v1728769944/xhesdna1zpozboijyvyo.png)
 
 # Security Implementations
 
