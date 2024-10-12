@@ -13,6 +13,11 @@ jobs:
   lint_and_test:
     runs-on: ubuntu-latest
     environment: development
+    env: 
+      DATABASE_URL: ${{ secrets.DATABASE_URL }} 
+      JWT_SECRET: ${{ secrets.JWT_SECRET }} 
+      REDIS_URL: ${{secrets.REDIS_URL }}
+      
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
