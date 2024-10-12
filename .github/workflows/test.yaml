@@ -1,0 +1,48 @@
+name: Lint And Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  lint_and_test:
+    runs-on: ubuntu-latest
+    environment: development
+    env: 
+      DATABASE_URL: ${{ secrets.DATABASE_URL }} 
+      JWT_SECRET: ${{ secrets.JWT_SECRET }} 
+      REDIS_URL: ${{secrets.REDIS_URL }}
+      
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Specify the Node.js version you are using
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      # - name: Run ESLint
+      #   run: |
+      #     npm run lint
+
+      - name: Run tests
+        run: |
+          npm test

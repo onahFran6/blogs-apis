@@ -1,6 +1,6 @@
-import dotenv from 'src/config/dotenv';
-import logger from 'src/config/logger';
-import redisClient, { connectRedis, disconnectRedis } from 'src/config/redisClient';
+import dotenv from '../config/dotenv';
+import logger from '../config/logger';
+import redisClient, { connectRedis, disconnectRedis } from '../config/redisClient';
 
 const redisExpiration = dotenv.redisExpiration;
 
@@ -42,6 +42,7 @@ export const setDataToRedis = async (redisUniqueId: string, data: any): Promise<
     await redisClient.setEx(redisUniqueId, redisExpiration, JSON.stringify(data));
     logger.info(`Successfully cached data for ${redisUniqueId}`);
   } catch (err) {
+    console.log(err);
     logger.error(`Error setting Redis data: ${err.message}`);
   } finally {
     await disconnectRedis();

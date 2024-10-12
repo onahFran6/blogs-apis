@@ -1,9 +1,14 @@
 import { createClient, RedisClientType } from 'redis';
 import logger from './logger';
+import dotenv from './dotenv';
 
 // Create and configure the Redis client
 const redisClient: RedisClientType = createClient({
-  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+  url: dotenv.redisUrl,
+  socket: {
+    tls: true,
+    rejectUnauthorized: false,
+  },
 });
 
 let isConnected = false;
@@ -16,6 +21,7 @@ export const connectRedis = async (): Promise<void> => {
       isConnected = true;
       logger.info('🚀 Successfully connected to Redis.');
     } catch (err) {
+      console.log('=====>>>>>', err);
       isConnected = false;
       logger.error(`❌ Redis connection failed: ${err.message}`);
       throw new Error('Failed to connect to Redis');
