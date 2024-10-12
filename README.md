@@ -121,6 +121,10 @@ The server will start on [http://localhost:3000](http://localhost:3000).
 | GET         | /users/top-users-posts-comments | Get top 3 users with the most posts and latest comments |
 | GET         | /posts/:postId/comments         | Retrieve all comments for a post                        |
 
+# Database diagram
+
+![alt text](<Screenshot 2024-10-12 at 10.24.46 PM.png>)
+
 # Security Implementations
 
 ### 1. CORS
