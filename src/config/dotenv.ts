@@ -3,38 +3,31 @@ import logger from './logger';
 
 dotenv.config();
 
-// Validate necessary environment variables
-if (!process.env.PORT) {
-  logger.error('PORT environment variable is not defined!');
-  process.exit(1);
-}
 if (!process.env.DATABASE_URL) {
   logger.error('DATABASE_URL environment variable is not defined!');
   process.exit(1);
 }
 
-if (!process.env.WHITELISTED_IPS) {
-  logger.error(
-    'WHITELISTED_IPS environment variable is not set. Application cannot start without it.',
-  );
+if (!process.env.JWT_SECRET) {
+  logger.error('JWT_SECRET environment variable is not set. Application cannot start without it.');
   process.exit(1);
 }
 
-if (!process.env.ALLOWED_ORIGINS) {
-  logger.error(
-    'ALLOWED_ORIGINS environment variable is not set. Application cannot start without it.',
-  );
+if (!process.env.REDIS_URL) {
+  logger.error('REDIS_URL environment variable is not defined!');
   process.exit(1);
 }
 
 export default {
   port: process.env.PORT || 3000,
   databaseUrl: process.env.DATABASE_URL,
-  whitelistIps: process.env.WHITELISTED_IPS,
-  redisHost: process.env.REDIS_HOST || 'localhost',
-  redisPort: Number(process.env.REDIS_PORT) || 6379,
+  whitelistIps: process.env.WHITELISTED_IPS ? process.env.WHITELISTED_IPS : '',
   redisExpiration: Number(process.env.REDIS_EXPIRATION) || 3600,
   redisPassword: process.env.REDIS_PASSWORD || undefined,
-  allowedOrigins: process.env.ALLOWED_ORIGINS.split(','),
-  sessionSecret: process.env.SESSION_STORAGE,
+  allowedOrigins: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [],
+  sessionSecret: process.env.SESSION_STORAGE || 'sessionSecrtet',
+  jwtSecret: process.env.JWT_SECRET,
+  jwtExpiration: process.env.JWT_EXPIRATION || '24h',
+  redisUrl: process.env.REDIS_URL,
+  isAllowAll: process.env.IS_ALLOW_ALL_IP_ADDRESS ? process.env.IS_ALLOW_ALL_IP_ADDRESS : false,
 };

@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:16-alpine AS builder
+FROM node:18-alpine AS builder
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -13,7 +13,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Create the production image
-FROM node:16-alpine
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -23,7 +23,7 @@ COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/package*.json ./
 
 # Install only production dependencies
-RUN npm install --production
+RUN npm install --omit=dev
 
 # Expose the application port
 EXPOSE 3000

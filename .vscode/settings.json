@@ -1,4 +1,7 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": "file:///Users/apple/Documents/vs-code/backend-onah/BLOGS_VEST/.github/workflows/deploy.yaml"
+  }
 }

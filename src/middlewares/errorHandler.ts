@@ -1,16 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from '../config/logger';
+import { CustomError } from '../utility/customError';
 
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   const isProduction = process.env.NODE_ENV === 'production';
 
-  const statusCode = err.statusCode || 500;
+  const statusCode = err instanceof CustomError ? err.statusCode : 500;
   const errorResponse = {
     success: false,
     statusCode,
     message: err.message || 'Internal Server Error',
-    ...(isProduction ? null : { stack: err.stack }), // Show stack trace only in development
-    errorType: err.name || 'ServerError', // Add error type for easier categorization
+    ...(isProduction ? null : { stack: err.stack }),
+    errorType: err instanceof CustomError ? err.errorType : 'ServerError',
   };
 
   // Log error details to file or console

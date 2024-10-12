@@ -13,6 +13,8 @@ import dotenv from './config/dotenv';
 import redisClient, { ensureRedisConnection } from './config/redisClient';
 import logger from './config/logger';
 import RedisStore from 'connect-redis';
+import userRouter from './routes/userRoutes';
+import postRouter from './routes/postRoutes';
 
 const app = express();
 
@@ -53,7 +55,7 @@ app.use(
   }),
 );
 
-app.use(lusca.csrf());
+// app.use(lusca.csrf());
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1y' }));
@@ -63,7 +65,10 @@ app.use(limiter);
 app.use(useCors);
 app.use(ipWhitelist);
 
-// Health check route
+// API Routes
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/posts', postRouter);
+
 app.get('/', (req: Request, res: Response) => {
   res.send('Server is healthy and running');
 });
