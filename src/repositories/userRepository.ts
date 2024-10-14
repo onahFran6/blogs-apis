@@ -83,24 +83,41 @@ export const getTopUsersWithLatestComments = async () => {
 
 export const getTopUsersWithLatestCommentsOptimized = async () => {
   try {
-    const query = `
-    WITH TopUsers AS (
-        SELECT u.id AS user_id, u.name, COUNT(p.id) AS post_count
-        FROM users u
-        JOIN posts p ON p."userId" = u.id
-        GROUP BY u.id
-        ORDER BY post_count DESC
+      const query = `
+      SELECT 
+        u.id AS user_id, 
+        u.name, 
+        tu.post_count, 
+        c.content AS latest_comment, 
+        c."createdAt" AS latest_comment_date
+      FROM (
+        -- Get top 3 users with the most posts
+        SELECT 
+          p."userId", 
+          COUNT(p.id) AS post_count
+        FROM 
+          posts p
+        GROUP BY 
+          p."userId"
+        ORDER BY 
+          post_count DESC
         LIMIT 3
-    ),
-    LatestComments AS (
-        SELECT c."userId", c.content AS latest_comment, c."createdAt",
-               ROW_NUMBER() OVER (PARTITION BY c."userId" ORDER BY c."createdAt" DESC) AS rn
-        FROM comments c
-    )
-    SELECT tu."userId", tu.name, tu.post_count, lc.latest_comment
-    FROM TopUsers tu
-    LEFT JOIN LatestComments lc ON tu."userId" = lc."userId" AND lc.rn = 1;
-  `;
+      ) tu
+      JOIN users u ON u.id = tu."userId"
+      LEFT JOIN LATERAL (
+        -- Get the latest comment per user
+        SELECT 
+          content, 
+          "createdAt"
+        FROM 
+          comments c
+        WHERE 
+          c."userId" = u.id
+        ORDER BY 
+          "createdAt" DESC
+        LIMIT 1
+      ) c ON true;
+    `;
     const result = await pool.query(query);
     return result.rows;
   } catch (error) {
