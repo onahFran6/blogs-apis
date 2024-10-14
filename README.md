@@ -118,7 +118,8 @@ The server will start on [http://localhost:3000](http://localhost:3000).
 | POST        | /users/:id/posts                | Create a new post for a user                            |
 | GET         | /users/:id/posts                | Retrieve all posts for a user                           |
 | POST        | /posts/:postId/comments         | Add a comment to a post                                 |
-| GET         | /users/top-users-posts-comments | Get top 3 users with the most posts and latest comments |
+| GET         | /users/top-users-posts-comments/ | Get top 3 users with the most posts and latest comments |
+| GET         | /users/top-users-posts-comments-optimized | Get top 3 users with the most posts and latest comments |
 | GET         | /posts/:postId/comments         | Retrieve all comments for a post                        |
 
 # Security Implementations
